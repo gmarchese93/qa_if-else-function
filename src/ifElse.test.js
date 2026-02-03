@@ -1,6 +1,6 @@
 'use strict';
 
-const ifElse = require('./ifElse');
+const { ifElse } = require('./ifElse');
 
 test('calls condition callback', () => {
   const condition = jest.fn(() => true);
@@ -9,7 +9,7 @@ test('calls condition callback', () => {
 
   ifElse(condition, first, second);
 
-  expect(condition).toHaveBeenCalled();
+  expect(condition).toHaveBeenCalledWith();
 });
 
 test('calls first callback when condition returns true', () => {
@@ -19,7 +19,7 @@ test('calls first callback when condition returns true', () => {
 
   ifElse(condition, first, second);
 
-  expect(first).toHaveBeenCalled();
+  expect(first).toHaveBeenCalledWith();
   expect(second).not.toHaveBeenCalled();
 });
 
@@ -30,19 +30,19 @@ test('calls second callback when condition returns false', () => {
 
   ifElse(condition, first, second);
 
-  expect(second).toHaveBeenCalled();
+  expect(second).toHaveBeenCalledWith();
   expect(first).not.toHaveBeenCalled();
 });
 
-test('callbacks are called without arguments', () => {
-  const condition = jest.fn(() => true);
+test('calls second callback when condition returns a truthy value other than true', () => {
+  const condition = jest.fn(() => 1); // truthy but not true
   const first = jest.fn();
   const second = jest.fn();
 
   ifElse(condition, first, second);
 
-  expect(first).toHaveBeenCalledWith();
-  expect(condition).toHaveBeenCalledWith();
+  expect(second).toHaveBeenCalledWith();
+  expect(first).not.toHaveBeenCalled();
 });
 
 test('returns nothing', () => {
